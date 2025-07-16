@@ -33,5 +33,35 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RestrictionException.class)
+    public ResponseEntity<Map<String, String>> handleException(RestrictionException exception) {
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Operation not allowed");
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleException(UserNotFoundException exception) {
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "User not found");
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidOTPException.class)
+    public ResponseEntity<Map<String, String>> handleException(InvalidOTPException exception) {
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Invalid OTP");
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OTPExpiredException.class)
+    public ResponseEntity<Map<String, String>> handleException(OTPExpiredException exception) {
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "OTP has expired");
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 }

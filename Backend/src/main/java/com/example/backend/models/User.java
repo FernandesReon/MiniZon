@@ -39,7 +39,11 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    // TODO: Create VerificationToken, Cart, Order and Address mapping
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "token_id", referencedColumnName = "verificationTokenId")
+    private VerificationToken token;
+
+    // TODO: Create Cart, Order and Address mapping
 
     @PrePersist
     public void prePersist(){
