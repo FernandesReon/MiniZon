@@ -1,0 +1,10 @@
+@id = 
+PUT http://localhost:8080/api/user/update/id/{{id}}
+Content-Type: application/json
+
+# update field of choice.
+{
+  "name": "",
+  "email": "",
+  "password": ""
+}

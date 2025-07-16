@@ -1,0 +1,2 @@
+@id =
+DELETE http://localhost:8080/api/user/remove/id/{{id}}

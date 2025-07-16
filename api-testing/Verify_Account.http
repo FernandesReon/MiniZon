@@ -1,0 +1,6 @@
+POST http://localhost:8080/api/user/verify-account?email=jervaciofernandes@gmail.com
+Content-Type: application/json
+
+{
+  "otp": "580972"
+}
