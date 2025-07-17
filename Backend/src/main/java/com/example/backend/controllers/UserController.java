@@ -1,8 +1,6 @@
 package com.example.backend.controllers;
 
-import com.example.backend.dtos.AccountVerificationDTO;
-import com.example.backend.dtos.UserRequestDTO;
-import com.example.backend.dtos.UserResponseDTO;
+import com.example.backend.dtos.*;
 import com.example.backend.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -72,6 +70,44 @@ public class UserController {
         }
     }
 
-    // TODO:: Include Profile, Login and Logout endpoints
+    // Reset Password
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> sendResetPasswordOTP(@RequestParam String email){
+        try {
+            log.info("Controller:: Sending reset password otp {}", email);
+            userService.sendResetPasswordOTP(email);
+            log.info("Controller:: Reset Password OTP sent {}", email);
+            return ResponseEntity.ok().body("OTP sent");
+        } catch (Exception e) {
+            log.error("Controller:: Error resending otp {}", email, e);
+            throw new RuntimeException(e);
+        }
+    }
 
+    @PostMapping("/verify-reset-otp")
+    public ResponseEntity<String> verifyResetOTP(@Valid @RequestBody VerifyOTPDTO verifyOTPDTO){
+        try {
+            log.info("Controller:: Verifying reset otp {}", verifyOTPDTO);
+            userService.verifyResetPasswordOTP(verifyOTPDTO.getEmail(), verifyOTPDTO.getOtp());
+            log.info("Controller:: Reset Password Verification success {}", verifyOTPDTO);
+            return ResponseEntity.ok().body("OTP verified");
+        } catch (Exception e) {
+            log.error("Controller:: Error verifying reset otp {}", verifyOTPDTO, e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/new-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO){
+        try {
+            log.info("Controller:: Resetting password {}", resetPasswordDTO);
+            userService.resetPassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOtp(), resetPasswordDTO.getNewPassword());
+            log.info("Controller:: Password reset success {}", resetPasswordDTO);
+            return ResponseEntity.ok().body("Password reset success");
+        } catch (Exception e) {
+            log.error("Controller:: Error resetting password {}", resetPasswordDTO, e);
+            throw new RuntimeException(e);
+        }
+    }
+    // TODO:: Include Profile, Login and Logout endpoints
 }

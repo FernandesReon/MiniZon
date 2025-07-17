@@ -157,4 +157,89 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(e);
         }
     }
+
+    // Reset Password -> Login
+    @Override
+    public void sendResetPasswordOTP(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("User not found")
+        );
+
+        VerificationToken verificationToken = new VerificationToken();
+
+        String resetOTP = generateOTP();
+        verificationToken.setToken(resetOTP);
+
+        long resetOTPExpiry = System.currentTimeMillis() +  (5 * 60 * 1000);
+        verificationToken.setExpiryDate(resetOTPExpiry);
+
+        verificationToken.setUser(user);
+        user.setToken(verificationToken);
+        userRepository.save(user);
+
+        try {
+            log.info("Service:: Sending reset password email to user {}", user);
+            emailService.resetPassword(email, user.getName(), resetOTP);
+            log.info("Service:: Reset Password email sent.");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Verify the reset opt
+    @Override
+    public void verifyResetPasswordOTP(String email, String otp) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("User not found with email " + email)
+        );
+        
+        VerificationToken verificationToken = user.getToken();
+        
+        if (verificationToken == null || verificationToken.getToken() == null) {
+            throw new InvalidOTPException("No OTP found or it was already used.");
+        }
+        
+        if (!verificationToken.getToken().equals(otp)){
+            throw new InvalidOTPException("OTP does not match");
+        }
+        
+        if (verificationToken.getExpiryDate() < System.currentTimeMillis()){
+            throw new OTPExpiredException("OTP has expired");
+        }
+    }
+
+
+    // Create new Password
+    @Override
+    public void resetPassword(String email, String otp, String newPassword) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException("User not found with email " + email)
+        );
+
+        VerificationToken verificationToken = user.getToken();
+        if (verificationToken == null || verificationToken.getToken() == null) {
+            throw new InvalidOTPException("No OTP found or it was already used.");
+        }
+
+        if (!verificationToken.getToken().equals(otp)){
+            throw new InvalidOTPException("OTP does not match");
+        }
+
+        if (verificationToken.getExpiryDate() < System.currentTimeMillis()){
+            throw new OTPExpiredException("OTP has expired");
+        }
+
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        try {
+            log.info("Service:: Sending password reset success acknowledgement email to user {}", user);
+            emailService.passwordReset(email, user.getName());
+            log.info("Service:: Password reset acknowledgement email sent.");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -48,4 +48,34 @@ public class EmailService {
         message.setText(emailBody);
         mailSender.send(message);
     }
+
+    // Reset Password
+    public void resetPassword(String recipient, String name, String opt){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(emailSender);
+        message.setTo(recipient);
+        message.setSubject("Reset Password");
+        String emailBody = "Hello " + name + ",\n\n"
+                + "Your One-Time Password (OTP) for reset password is: " + opt + "\n"
+                + "It is valid for 5 minutes only.\n\n"
+                + "Best regards,\n"
+                + "The MiniZon Team";
+        message.setText(emailBody);
+        mailSender.send(message);
+    }
+
+    // Password Updated
+    public void passwordReset(String recipient, String name){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(emailSender);
+        message.setTo(recipient);
+        message.setSubject("Password Reset Success");
+        String emailBody = "Hello " + name + ",\n\n"
+                + "Your Password has been updated.\n"
+                + "Best regards,\n"
+                + "The MiniZon Team";
+        message.setText(emailBody);
+        mailSender.send(message);
+    }
+
 }
