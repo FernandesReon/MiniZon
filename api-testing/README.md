@@ -9,3 +9,4 @@ RESTful API endpoints directly within the IDE.
 - Deleting - Delete a user account
 - Verification - Verify user email or account
 - Resend OTP - Resend the one-time-password for verification
+- Reset Password - Send mail for changing password before login.
