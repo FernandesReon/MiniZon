@@ -1,4 +1,5 @@
-POST http://localhost:8080/api/user/register
+# Registration
+POST http://localhost:8080/api/user/auth/register
 Content-Type: application/json
 
 {
@@ -6,3 +7,18 @@ Content-Type: application/json
   "email": "",
   "password": ""
 }
+
+
+###
+# Otp verification
+POST http://localhost:8080/api/user/otp/verify-account?email=
+Content-Type: application/json
+
+{
+  "otp": ""
+}
+
+
+###
+# resend otp
+POST http://localhost:8080/api/user/otp/resend-otp?email=

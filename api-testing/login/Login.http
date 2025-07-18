@@ -1,11 +1,11 @@
 #Reset Password
-POST http://localhost:8080/api/user/resend-otp?email=
+POST http://localhost:8080/api/user/otp/reset-password?email=
 
 
 ###
 
 #Verify Reset OTP
-POST http://localhost:8080/api/user/verify-reset-otp
+POST http://localhost:8080/api/user/otp/verify-reset-otp
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 ###
 
 #Reset Password
-POST http://localhost:8080/api/user/new-password
+POST http://localhost:8080/api/user/otp/new-password
 Content-Type: application/json
 
 {
