@@ -1,5 +1,6 @@
 package com.example.backend.configurations;
 
+import com.example.backend.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,18 +29,35 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    private final JwtAuthenticationFilter authenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter authenticationFilter) {
+        this.authenticationFilter = authenticationFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        security.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer :: disable)
+        security
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/auth/register", "/api/user/otp/verify-account",
-                                "/api/user/otp/resend-otp", "/api/user/otp/reset-password",
-                                "/api/user/otp/verify-reset-otp", "/api/user/otp/new-password").permitAll()
+                        .requestMatchers(
+                                "/api/user/auth/register",
+                                "/api/user/auth/login",
+                                "/api/user/otp/verify-account",
+                                "/api/user/otp/resend-otp",
+                                "/api/user/otp/reset-password",
+                                "/api/user/otp/verify-reset-otp",
+                                "/api/user/otp/new-password"
+                        ).permitAll()
                         .requestMatchers("/api/user/update/**", "/api/user/remove/**").authenticated()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN"))
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(AbstractHttpConfigurer::disable);
+
         return security.build();
     }
 
