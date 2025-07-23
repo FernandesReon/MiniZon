@@ -50,7 +50,10 @@ public class User implements UserDetails {
     @JoinColumn(name = "token_id", referencedColumnName = "verificationTokenId")
     private VerificationToken token;
 
-    // TODO: Create Cart, Order and Address mapping
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addressList;
+
+    // TODO: Create Cart and Order mapping
 
     @PrePersist
     public void prePersist(){

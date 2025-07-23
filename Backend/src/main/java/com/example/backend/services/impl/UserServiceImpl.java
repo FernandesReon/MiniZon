@@ -1,8 +1,9 @@
 package com.example.backend.services.impl;
 
-import com.example.backend.dtos.UserLoginDTO;
-import com.example.backend.dtos.UserRequestDTO;
-import com.example.backend.dtos.UserResponseDTO;
+import com.example.backend.dtos.user.UserLoginDTO;
+import com.example.backend.dtos.user.UserProfileDTO;
+import com.example.backend.dtos.user.UserRequestDTO;
+import com.example.backend.dtos.user.UserResponseDTO;
 import com.example.backend.exceptions.*;
 import com.example.backend.jwt.JwtResponse;
 import com.example.backend.jwt.JwtUtils;
@@ -287,5 +288,17 @@ public class UserServiceImpl implements UserService {
             log.error("Service:: Authentication failed", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public UserProfileDTO userProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authenticateEmail = authentication.getName();
+
+        User user = userRepository.findByEmail(authenticateEmail).orElseThrow(
+                () -> new UserNotFoundException("User not found with email " + authenticateEmail)
+        );
+
+        return UserMapper.toProfile(user);
     }
 }

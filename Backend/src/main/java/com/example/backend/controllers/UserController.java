@@ -1,6 +1,8 @@
 package com.example.backend.controllers;
 
-import com.example.backend.dtos.*;
+import com.example.backend.dtos.user.UserProfileDTO;
+import com.example.backend.dtos.user.UserRequestDTO;
+import com.example.backend.dtos.user.UserResponseDTO;
 import com.example.backend.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,5 +45,13 @@ public class UserController {
             log.error("Controller :: Unable to remove user {}", id, e);
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileDTO> userProfile(){
+        log.info("Controller:: Fetching user profile");
+        UserProfileDTO userProfileDTO = userService.userProfile();
+        log.info("Controller:: Fetched user profile");
+        return ResponseEntity.ok().body(userProfileDTO);
     }
 }

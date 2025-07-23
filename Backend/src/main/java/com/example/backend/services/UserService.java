@@ -1,8 +1,9 @@
 package com.example.backend.services;
 
-import com.example.backend.dtos.UserLoginDTO;
-import com.example.backend.dtos.UserRequestDTO;
-import com.example.backend.dtos.UserResponseDTO;
+import com.example.backend.dtos.user.UserLoginDTO;
+import com.example.backend.dtos.user.UserProfileDTO;
+import com.example.backend.dtos.user.UserRequestDTO;
+import com.example.backend.dtos.user.UserResponseDTO;
 import com.example.backend.jwt.JwtResponse;
 
 public interface UserService {
@@ -22,4 +23,7 @@ public interface UserService {
     // login
     boolean isUserAuthorized(Long id);
     JwtResponse authenticateUser(UserLoginDTO loginDTO);
+
+    // profile
+    UserProfileDTO userProfile();
 }

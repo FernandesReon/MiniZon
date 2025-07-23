@@ -1,8 +1,8 @@
 package com.example.backend.mapper;
 
-import com.example.backend.dtos.UserProfileDTO;
-import com.example.backend.dtos.UserRequestDTO;
-import com.example.backend.dtos.UserResponseDTO;
+import com.example.backend.dtos.user.UserProfileDTO;
+import com.example.backend.dtos.user.UserRequestDTO;
+import com.example.backend.dtos.user.UserResponseDTO;
 import com.example.backend.models.User;
 
 public class UserMapper {
@@ -36,6 +36,11 @@ public class UserMapper {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setRoles(user.getRoles());
+        dto.setCreatedAt(user.getCreatedAt());
+        dto.setUpdatedAt(user.getUpdatedAt());
+        dto.setAddressList(user.getAddressList());
+        dto.setEmailVerified(user.isEmailVerified());
+        dto.setAccountEnabled(user.isAccountEnabled());
         return dto;
     }
 

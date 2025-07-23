@@ -1,8 +1,8 @@
 package com.example.backend.controllers;
 
-import com.example.backend.dtos.UserLoginDTO;
-import com.example.backend.dtos.UserRequestDTO;
-import com.example.backend.dtos.UserResponseDTO;
+import com.example.backend.dtos.user.UserLoginDTO;
+import com.example.backend.dtos.user.UserRequestDTO;
+import com.example.backend.dtos.user.UserResponseDTO;
 import com.example.backend.jwt.JwtResponse;
 import com.example.backend.services.UserService;
 import jakarta.servlet.http.Cookie;
@@ -66,6 +66,4 @@ public class AuthController {
             throw new RuntimeException(e);
         }
     }
-
-    // TODO:: Include Profile, Login and Logout endpoints
 }

@@ -50,7 +50,12 @@ public class SecurityConfig {
                                 "/api/user/otp/verify-reset-otp",
                                 "/api/user/otp/new-password"
                         ).permitAll()
-                        .requestMatchers("/api/user/update/**", "/api/user/remove/**").authenticated()
+                        .requestMatchers(
+                                "/api/user/update/**",
+                                "/api/user/remove/**",
+                                "/api/user/profile",
+                                "/api/user/address/**"
+                        ).authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

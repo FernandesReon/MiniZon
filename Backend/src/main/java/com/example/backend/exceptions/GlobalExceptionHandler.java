@@ -88,4 +88,13 @@ public class GlobalExceptionHandler {
         errors.put("message", "Account is disabled. Contact your administrator.");
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    // Address exception
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleException(AddressNotFoundException exception) {
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Address not found");
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    }
 }
