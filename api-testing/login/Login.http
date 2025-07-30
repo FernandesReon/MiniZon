@@ -1,3 +1,16 @@
+# Login - JWT - Cookies
+POST http://localhost:8080/api/user/auth/login
+Content-Type: application/json
+
+{
+  "email": "jonitafernandesrio@gmail.com",
+  "password": "helloJonita?51"
+}
+
+> {% set-cookie %}
+
+###
+
 #Reset Password
 POST http://localhost:8080/api/user/otp/reset-password?email=
 

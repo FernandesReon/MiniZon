@@ -26,34 +26,54 @@ public class AddressController {
 
     @GetMapping("/fetch")
     public ResponseEntity<List<AddressResponseDTO>> fetchAll() {
-        log.info("Controller:: Fetching all user addresses");
-        List<AddressResponseDTO> addressList = addressService.getAllAddresses();
-        return ResponseEntity.ok().body(addressList);
+        try {
+            log.info("Controller:: Fetching all user addresses");
+            List<AddressResponseDTO> addressList = addressService.getAllAddresses();
+            return ResponseEntity.ok().body(addressList);
+        } catch (Exception e) {
+            log.error("Controller:: Fetching all user addresses failed", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/add")
     public ResponseEntity<AddressResponseDTO> addAddress(@Validated({OnCreate.class, Default.class})
                                                              @RequestBody AddressRequestDTO addressRequestDTO) {
-        log.info("Controller:: Adding user address {}", addressRequestDTO);
-        AddressResponseDTO address = addressService.createAddress(addressRequestDTO);
-        log.info("Controller:: Address created {}", address);
-        return ResponseEntity.ok().body(address);
+        try {
+            log.info("Controller:: Adding user address {}", addressRequestDTO);
+            AddressResponseDTO address = addressService.createAddress(addressRequestDTO);
+            log.info("Controller:: Address created {}", address);
+            return ResponseEntity.ok().body(address);
+        } catch (Exception e) {
+            log.error("Controller:: Unable to add user address {}", addressRequestDTO, e);
+            throw new RuntimeException(e);
+        }
     }
 
     @PutMapping("/update/id/{id}")
     public ResponseEntity<AddressResponseDTO> updateAddress(@PathVariable Long id,
                                                             @Validated(OnUpdate.class) @RequestBody AddressRequestDTO addressRequestDTO) {
-        log.info("Controller:: Updating user address {}", addressRequestDTO);
-        AddressResponseDTO updatedAddress = addressService.updateAddress(id, addressRequestDTO);
-        log.info("Controller:: Address updated {}", updatedAddress);
-        return ResponseEntity.ok().body(updatedAddress);
+        try {
+            log.info("Controller:: Updating user address {}", addressRequestDTO);
+            AddressResponseDTO updatedAddress = addressService.updateAddress(id, addressRequestDTO);
+            log.info("Controller:: Address updated {}", updatedAddress);
+            return ResponseEntity.ok().body(updatedAddress);
+        } catch (Exception e) {
+            log.error("Controller:: Unable to update user address {}", addressRequestDTO, e);
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/delete/id/{id}")
     public ResponseEntity<?> deleteAddress(@PathVariable Long id) {
-        log.info("Controller:: Deleting user address {}", id);
-        addressService.deleteAddress(id);
-        log.info("Controller:: Address deleted {}", id);
-        return ResponseEntity.noContent().build();
+        try {
+            log.info("Controller:: Deleting user address {}", id);
+            addressService.deleteAddress(id);
+            log.info("Controller:: Address deleted {}", id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            log.error("Controller:: Unable to delete user address {}", id, e);
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -12,9 +12,13 @@ import com.example.backend.models.User;
 import com.example.backend.models.VerificationToken;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.services.EmailService;
+import com.example.backend.services.ProductService;
 import com.example.backend.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,14 +38,16 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
+    private final ProductServiceImpl productService;
 
     public UserServiceImpl(UserRepository userRepository, EmailService emailService, PasswordEncoder passwordEncoder,
-                           JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
+                           JwtUtils jwtUtils, AuthenticationManager authenticationManager, ProductServiceImpl productService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
+        this.productService = productService;
     }
 
     @Override
@@ -68,6 +74,16 @@ public class UserServiceImpl implements UserService {
         }
 
         return UserMapper.responseToUser(savedUser);
+    }
+
+    @Override
+    public Page<UserResponseDTO> getAllUsers(int pageNo, int pageSize) {
+        String authenticatedEmail = productService.verifyAdminAccess();
+
+        log.info("Service:: Fetching all users with pagination: pageNo={}, pageSize={}", pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        Page<User> users = userRepository.findAll(pageable);
+        return users.map(UserMapper::responseToUser);
     }
 
     @Override

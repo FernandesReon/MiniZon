@@ -5,9 +5,11 @@ import com.example.backend.dtos.user.UserProfileDTO;
 import com.example.backend.dtos.user.UserRequestDTO;
 import com.example.backend.dtos.user.UserResponseDTO;
 import com.example.backend.jwt.JwtResponse;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
     UserResponseDTO registration(UserRequestDTO userRequestDTO);
+    Page<UserResponseDTO> getAllUsers(int pageNo, int pageSize);
     UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO);
     void deleteUser(Long id);
 

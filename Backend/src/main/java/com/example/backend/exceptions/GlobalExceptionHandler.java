@@ -97,4 +97,22 @@ public class GlobalExceptionHandler {
         errors.put("message", "Address not found");
         return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
     }
+
+    // Product exception
+    @ExceptionHandler(ProductAlreadyExistException.class)
+    public ResponseEntity<Map<String, String>> handleException(ProductAlreadyExistException exception) {
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Product already exists");
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    // Resource exception
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleException(ResourceNotFoundException exception){
+        logger.error(exception.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Resource not found");
+        return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
+    }
 }

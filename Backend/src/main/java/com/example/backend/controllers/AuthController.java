@@ -30,10 +30,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        log.info("Controller:: Creating user {}", userRequestDTO);
-        UserResponseDTO register = userService.registration(userRequestDTO);
-        log.info("Controller:: Saving user {}", register);
-        return ResponseEntity.ok().body(register);
+        try {
+            log.info("Controller:: Creating user {}", userRequestDTO);
+            UserResponseDTO register = userService.registration(userRequestDTO);
+            log.info("Controller:: Saving user {}", register);
+            return ResponseEntity.ok().body(register);
+        } catch (Exception e) {
+            log.error("Controller:: Creating user failed", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/login")

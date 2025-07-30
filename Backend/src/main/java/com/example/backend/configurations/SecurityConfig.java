@@ -48,7 +48,8 @@ public class SecurityConfig {
                                 "/api/user/otp/resend-otp",
                                 "/api/user/otp/reset-password",
                                 "/api/user/otp/verify-reset-otp",
-                                "/api/user/otp/new-password"
+                                "/api/user/otp/new-password",
+                                "/api/user/products"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/user/update/**",

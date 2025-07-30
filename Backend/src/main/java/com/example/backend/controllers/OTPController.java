@@ -1,8 +1,8 @@
 package com.example.backend.controllers;
 
-import com.example.backend.dtos.AccountVerificationDTO;
-import com.example.backend.dtos.ResetPasswordDTO;
-import com.example.backend.dtos.VerifyOTPDTO;
+import com.example.backend.dtos.authentication.AccountVerificationDTO;
+import com.example.backend.dtos.authentication.ResetPasswordDTO;
+import com.example.backend.dtos.authentication.VerifyOTPDTO;
 import com.example.backend.services.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
